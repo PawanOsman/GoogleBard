@@ -1,4 +1,4 @@
-# GoogleBard - A reverse engineered API for Google Bard chatbot [[Discord](https://discord.pawan.krd)]
+# **GoogleBard** - A reverse engineered API for Google Bard chatbot [[Discord](https://discord.pawan.krd)]
 
 [![NPM](https://img.shields.io/npm/v/googlebard.svg?label=NPM&logo=npm&color=CB3837)](https://www.npmjs.com/package/googlebard)
 [![NPM](https://img.shields.io/npm/dm/googlebard?label=Downloads&color=CB3837&logo=data%3Aimage%2Fpng%3Bbase64%2CiVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAAsQAAALEBxi1JjQAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAKoSURBVEiJ7ZZLTBNRFIb%2FedDS6UNKVQgZAkJTlJdACoZgGhKj0QSNwUVxIbrRhSaasCJh58atcaExkYXogoRISF2UxJVReYkWK6gTB9KK1bZjBQlMNcz0ujAlJe3QamSl%2F%2B7m3PP995w592aAbRaVy6bqanujycZeSa4TKlGXo2qvKIpStlw2FwOdjnG5zvFnS%2BuMAIDJoci3icHoLQB%2FxwAATDYWBSX5AADOwiZyzaNz3fin%2Bm%2FwDxhojSlTW19xgaXz9ACgqIpr05WkQOWb6dMNDVUHAUBJrP%2BY9S%2FcBpA2vpo3udHpeNx0sqiNrzExFEVQWm8Gq%2FtVsLysIPxeBgB8nFtVfZ7o2MspwZWJo9kiKSwf9Xujs9YSHfY4d2zAAYArYFHRbEEhr4ffK71VgsvHtDiMVmBlZUXRMeaRRd9qZ%2B0RmzXVAAASCsHA5XcLkWC8XQiFlrQ4W37kQCAQlhbXOwd7hVBCIZvg%2FlFpms6nnYFAILwVQ7OCpGKxWMRssIhRUT60r73QCACeawuSbyTWN%2FXkzYts%2BRtTVNfc9ojhOCtREsxaJHhRFMXxZMzvEz163V7H0%2Fuf%2BmhC6KBv7cbMjDCUCrLb7a3GorKbFEurqiwvvX7%2B7PAmp5YO93yPQEhXv5c4yivdmU7jbK0acLY57maKOcor3V39XtIjENLS4Z5PqyApmmHA6jkuE2R6XOjW6ARYPcfRTHrH0wxsNU5wFfarDcXFl7RgmZRnMO0urG3ewiChqgCQZ7HCdX2YB8D%2FjkGqiKqoaQbxr1%2BmPowO8Tv3HzCAYcDtKoEcDQGEgCviEZc%2Bg6hKVrj0aiL%2BfSk2mVynPhV0dVPLeZ3B2ApCkcoTZ4bnHw6cAoCy490Pgp57naBI1p%2BE9TV5bG5m8g4yvEvbop%2BZL%2FJtWVlNhAAAAABJRU5ErkJggg%3D%3D)](https://www.npmjs.com/package/GoogleBard)
@@ -10,7 +10,7 @@
 
 A simple Node.js module for creating ChatGPT using OpenAI official API.
 
-## Installation
+## **Installation**
 
 To install the package, run the following command:
 
@@ -27,14 +27,25 @@ let response = await bot.ask("Hello?");
 console.log(response);
 ```
 
-## Features
-
+## **Features**
 - **Simulating Response Streaming**: The package simulates response streaming, allowing you to get the response as soon as it is available.
 - **Multiple conversations**: The package supports multiple conversations, allowing you to have multiple parallel conversations with the chatbot.
 - **Proxy Support**: The package supports proxies, allowing you to use the chatbot from any location.
 - **Lightweight**: The package is very lightweight, making it easy to use and integrate into your projects.
 
-## Usage: **_Using proxy is recomended!_**
+## **You must be whitelisted by google to use this package.**
+You must be whitelisted by google to use this package. You can join waitlist by going to https://bard.google.com and clicking on "Join Waitlist" button.
+
+You can use USA proxies to get whitelisted.
+
+## **How to get cookies?**
+Go to https://bard.google.com and Copy this code into your browser console  and press enter. It will copy your cookies to your clipboard.
+
+```javascript
+navigator.clipboard.writeText(document.cookie);
+```
+
+## Usage: **_Using a USA proxy is recomended!_**
 
 ```javascript
 import { Bard } from "GoogleBard";
