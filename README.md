@@ -27,7 +27,14 @@ let response = await bot.ask("Hello?");
 console.log(response);
 ```
 
-## Usage: ***Using proxy is recomended!***
+## Features
+
+- **Simulating Response Streaming**: The package simulates response streaming, allowing you to get the response as soon as it is available.
+- **Multiple conversations**: The package supports multiple conversations, allowing you to have multiple parallel conversations with the chatbot.
+- **Proxy Support**: The package supports proxies, allowing you to use the chatbot from any location.
+- **Lightweight**: The package is very lightweight, making it easy to use and integrate into your projects.
+
+## Usage: **_Using proxy is recomended!_**
 
 ```javascript
 import { Bard } from "GoogleBard";
@@ -51,4 +58,11 @@ let conversationId = "conversation name"; // optional: to make it remember old c
 
 let response = await bot.ask("Hello?", conversationId);
 console.log(response);
+
+// Simulating response streaming
+
+await bot.askStream((res) => {
+	console.log(res);
+}, "Hello?", conversationId);
+
 ```

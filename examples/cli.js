@@ -1,5 +1,8 @@
 import { Bard } from "../dist/index.js";
+import { config } from "dotenv";
 import readline from "readline";
+
+config();
 
 const rl = readline.createInterface({
   input: process.stdin,
@@ -16,7 +19,7 @@ let bot = new Bard(cookies, {
       username: process.env.PROXY_USERNAME,
       password: process.env.PROXY_PASSWORD
     },
-    protocol: "http"
+    protocol: process.env.PROXY_PROTOCOL
   }
 });
 
@@ -29,8 +32,10 @@ async function main() {
     });
 
     process.stdout.write("Google Bard: ");
-    let response = await bot.ask(prompt, "default");
-    console.log(response);
+    await bot.askStream(res => {
+      process.stdout.write(res.toString());
+    }, prompt);
+    console.log();
   }
 }
 

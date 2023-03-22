@@ -2,22 +2,28 @@ import vm from "vm";
 import fs from "fs";
 import https from "https";
 import { load } from "cheerio";
+import Wait from "../utils/wait.js";
+import Random from "../utils/random.js";
 import Options from "../models/options.js";
-import axios, { AxiosInstance } from "axios";
 import AppDbContext from "./app-dbcontext.js";
 import Conversation from "../models/conversation.js";
+import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
 
 class Bard {
 	private axios: AxiosInstance;
 	private db: AppDbContext;
+	private cookies: string = "";
 
 	constructor(cookie: string, options?: Options) {
 		this.db = new AppDbContext();
+
+		this.cookies = cookie;
+
 		const agent = new https.Agent({
 			rejectUnauthorized: false,
 		});
 
-		let axiosOptions = {
+		let axiosOptions: AxiosRequestConfig = {
 			proxy: options?.proxy,
 			httpsAgent: agent,
 			headers: {
@@ -26,7 +32,6 @@ class Bard {
 				"Accept-Language": "en-US,en;q=0.5",
 				"Accept-Encoding": "gzip, deflate, br",
 				Connection: "keep-alive",
-				Cookie: cookie,
 				"Upgrade-Insecure-Requests": "1",
 				"Sec-Fetch-Dest": "document",
 				"Sec-Fetch-Mode": "navigate",
@@ -42,7 +47,7 @@ class Bard {
 
 	private async waitForLoad() {
 		while (this.db === null) {
-			await this.wait(1000);
+			await Wait(1000);
 		}
 		await this.db.WaitForLoad();
 	}
@@ -87,10 +92,6 @@ class Bard {
 			rc: "", // responseId
 			lastActive: Date.now(),
 		};
-	}
-
-	wait(ms: number) {
-		return new Promise((resolve) => setTimeout(resolve, ms));
 	}
 
 	private ParseResponse(text: string) {
@@ -143,7 +144,11 @@ class Bard {
 
 	private async GetRequestParams() {
 		try {
-			const response = await this.axios.get("https://bard.google.com");
+			const response = await this.axios.get("https://bard.google.com", {
+				headers: {
+					Cookie: this.cookies,
+				},
+			});
 			let $ = load(response.data);
 			let script = $("script[data-id=_gd]").html();
 			script = script.replace("window.WIZ_global_data", "googleData");
@@ -159,12 +164,22 @@ class Bard {
 		}
 	}
 
-	public async ask(prompt: string = "Hello", conversationId?: string) {
-		let resData = await this.send(prompt, conversationId);
-		return resData[0];
+	public async ask(prompt: string, conversationId?: string) {
+		return await this.askStream((data) => {}, prompt, conversationId);
 	}
 
-	private async send(prompt: string = "Hello", conversationId?: string) {
+	public async askStream(data: (arg0: string) => void, prompt: string, conversationId?: string) {
+		let resData = await this.send(prompt, conversationId);
+		let responseChunks = resData[0].split(" ");
+		for await (let chunk of responseChunks) {
+			if (chunk === "") continue;
+			data(`${chunk} `);
+			await Wait(Random(25, 250)); // simulate typing
+		}
+		return resData[1];
+	}
+
+	private async send(prompt: string, conversationId?: string) {
 		await this.waitForLoad();
 		let conversation = this.getConversationById(conversationId);
 		try {
@@ -176,6 +191,9 @@ class Bard {
 					"f.req": JSON.stringify([null, `[[${JSON.stringify(prompt)}],null,${JSON.stringify([conversation.c, conversation.r, conversation.rc])}]`]),
 				}),
 				{
+					headers: {
+						Cookie: this.cookies,
+					},
 					params: {
 						bl: bl,
 						rt: "c",
@@ -183,6 +201,11 @@ class Bard {
 					},
 				},
 			);
+
+			// let cookies = response.headers["set-cookie"];
+
+			// if (cookies) this.cookies = cookies.join("; ");
+
 			let parsedResponse = this.ParseResponse(response.data);
 			conversation.c = parsedResponse.c;
 			conversation.r = parsedResponse.r;
