@@ -1,6 +1,6 @@
 {
 	"name": "googlebard",
-	"version": "1.0.3",
+	"version": "1.0.4",
 	"description": "A reverse engineered API for Google Bard chatbot",
 	"main": "dist/index.js",
 	"type": "module",

@@ -152,7 +152,6 @@ class Bard {
 			let $ = load(response.data);
 			let script = $("script[data-id=_gd]").html();
 			script = script.replace("window.WIZ_global_data", "googleData");
-			fs.writeFileSync("response.html", script);
 			const context = { googleData: { cfb2h: "", SNlM0e: "" } };
 			vm.createContext(context);
 			vm.runInContext(script, context);
@@ -165,7 +164,9 @@ class Bard {
 	}
 
 	public async ask(prompt: string, conversationId?: string) {
-		return await this.askStream((data) => {}, prompt, conversationId);
+		// return await this.askStream((data) => {}, prompt, conversationId);
+		let resData = await this.send(prompt, conversationId);
+		return resData[0];
 	}
 
 	public async askStream(data: (arg0: string) => void, prompt: string, conversationId?: string) {
@@ -176,7 +177,7 @@ class Bard {
 			data(`${chunk} `);
 			await Wait(Random(25, 250)); // simulate typing
 		}
-		return resData[1];
+		return resData[0];
 	}
 
 	private async send(prompt: string, conversationId?: string) {
