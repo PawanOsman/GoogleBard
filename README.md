@@ -48,7 +48,7 @@ navigator.clipboard.writeText(document.cookie);
 ## Usage: **_Using a USA proxy is recomended!_**
 
 ```javascript
-import { Bard } from "GoogleBard";
+import { Bard } from "googlebard";
 
 let cookies = `NID=; SID=; __Secure-1PSID=; __Secure-3PSID=; HSID=; SSID=; APISID=; SAPISID=; __Secure-1PAPISID=; __Secure-3PAPISID=; SIDCC=; __Secure-1PSIDCC=; __Secure-3PSIDCC=`;
 
