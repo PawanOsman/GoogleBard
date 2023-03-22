@@ -27,7 +27,7 @@ let response = await bot.ask("Hello?");
 console.log(response);
 ```
 
-## Usage:
+## Usage: ***Using proxy is recomended!***
 
 ```javascript
 import { Bard } from "GoogleBard";
