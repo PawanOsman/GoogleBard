@@ -39,18 +39,18 @@ You must be whitelisted by google to use this package. You can join waitlist by 
 You can use USA proxies to get whitelisted.
 
 ## **How to get cookies?**
-Go to https://bard.google.com and Copy this code into your browser console  and press enter. It will copy your cookies to your clipboard.
 
-```javascript
-navigator.clipboard.writeText(document.cookie);
-```
+1. install [Cookie-Editor](https://cookie-editor.cgagnier.ca/) extension.
+2. Go to https://bard.google.com and login.
+3. Click on the extension icon and copy a cookie starting with `__Secure-` for example `__Secure-1PSID`
+4. Paste the cookie in your code.
 
 ## Usage: **_Using a USA proxy is recomended!_**
 
 ```javascript
 import { Bard } from "googlebard";
 
-let cookies = `NID=; SID=; __Secure-1PSID=; __Secure-3PSID=; HSID=; SSID=; APISID=; SAPISID=; __Secure-1PAPISID=; __Secure-3PAPISID=; SIDCC=; __Secure-1PSIDCC=; __Secure-3PSIDCC=`;
+let cookies = `__Secure-1PSID=<YOUR_COOKIE>`;
 
 let bot = new Bard(cookies, {
 	proxy: {
