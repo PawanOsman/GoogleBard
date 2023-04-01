@@ -163,15 +163,15 @@ class Bard {
 		}
 	}
 
-	public async ask(prompt: string, conversationId?: string) {
+	public async ask(prompt: string, conversationId?: string, conversationObject?: object) {
 		// return await this.askStream((data) => {}, prompt, conversationId);
-		let resData = await this.send(prompt, conversationId);
-		return resData[0];
+		let resData = await this.send(prompt, conversationObject, conversationId);
+		return resData;
 	}
 
 	public async askStream(data: (arg0: string) => void, prompt: string, conversationId?: string) {
 		let resData = await this.send(prompt, conversationId);
-		let responseChunks = resData[0].split(" ");
+		let responseChunks = resData.responses[0].split(" ");
 		for await (let chunk of responseChunks) {
 			if (chunk === "") continue;
 			data(`${chunk} `);
@@ -180,8 +180,16 @@ class Bard {
 		return resData[0];
 	}
 
-	private async send(prompt: string, conversationId?: string) {
+	private async send(prompt: string, conversationId?: string, conversationObject?: object) {
 		await this.waitForLoad();
+		let conversation;
+		if (conversationObject) {
+	        conversation: { c: string, r: string, rc: string } = {
+		  c: conversationObject.conversationId,
+		  r: conversationObject.requestId,
+		  rc: conversationObject.responseId,
+		}
+                
 		let conversation = this.getConversationById(conversationId);
 		try {
 			let { at, bl } = await this.GetRequestParams();
@@ -211,8 +219,15 @@ class Bard {
 			conversation.c = parsedResponse.c;
 			conversation.r = parsedResponse.r;
 			conversation.rc = parsedResponse.rc;
+			
+			let finalResponse: { conversationId: string, requestId: string, responseId: string, responses: string[] } = {
+			  conversationId: conversation.c,
+		          requestId: conversation.r,
+		          responseId: conversation.rc,
+		          responses: parsedResponse.responses
+			}
 
-			return parsedResponse.responses;
+			return finalResponse;
 		} catch (e: any) {
 			console.log(e.message);
 		}
