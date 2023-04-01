@@ -9,6 +9,11 @@ import AppDbContext from "./app-dbcontext.js";
 import Conversation from "../models/conversation.js";
 import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
 
+type cObject = {
+  
+
+}
+
 class Bard {
 	private axios: AxiosInstance;
 	private db: AppDbContext;
@@ -130,7 +135,7 @@ class Bard {
 				if (line.includes("wrb.fr")) {
 					let data = JSON.parse(line);
 					let responsesData = JSON.parse(data[0][2]);
-					responsesData.forEach((response) => {
+					responsesData.forEach((response: string) => {
 						parseData(response);
 					});
 				}
@@ -163,14 +168,14 @@ class Bard {
 		}
 	}
 
-	public async ask(prompt: string, conversationId?: string, conversationObject?: object) {
+	public async ask(prompt: string, conversationObject?: { conversationId: string, requestId: string, responseId: string }, conversationId?: string) {
 		// return await this.askStream((data) => {}, prompt, conversationId);
-		let resData = await this.send(prompt, conversationObject, conversationId);
+		let resData = await this.send(prompt, conversationId, conversationObject,);
 		return resData;
 	}
 
-	public async askStream(data: (arg0: string) => void, prompt: string, conversationId?: string) {
-		let resData = await this.send(prompt, conversationId);
+	public async askStream(data: (arg0: string) => void, prompt: string, conversationObject: { conversationId: string, requestId: string, responseId: string }, conversationId?: string, ) {
+		let resData = await this.send(prompt, conversationId, conversationObject);
 		let responseChunks = resData.responses[0].split(" ");
 		for await (let chunk of responseChunks) {
 			if (chunk === "") continue;
@@ -180,17 +185,16 @@ class Bard {
 		return resData[0];
 	}
 
-	private async send(prompt: string, conversationId?: string, conversationObject?: object) {
+	private async send(prompt: string, conversationId?: string, conversationObject?: { conversationId: string, requestId: string, responseId: string }) {
 		await this.waitForLoad();
-		let conversation;
-		if (conversationObject) {
-	        conversation: { c: string, r: string, rc: string } = {
-		  c: conversationObject.conversationId,
-		  r: conversationObject.requestId,
-		  rc: conversationObject.responseId,
-		}
-                
+		let conversation = { c: "", r: "", rc: "" };
+		if (typeof conversationObject === "object" && conversationObject) {
+	        conversation.c = conversationObject.conversationId
+		  conversation.r = conversationObject.requestId
+		  conversation.rc = conversationObject.responseId
+		} else {
 		let conversation = this.getConversationById(conversationId);
+		}
 		try {
 			let { at, bl } = await this.GetRequestParams();
 			const response = await this.axios.post(
@@ -225,7 +229,6 @@ class Bard {
 		          requestId: conversation.r,
 		          responseId: conversation.rc,
 		          responses: parsedResponse.responses,
-		          lastActive: Date.now(),
 			}
 
 			return finalResponse;
