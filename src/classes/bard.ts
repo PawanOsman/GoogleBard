@@ -9,11 +9,6 @@ import AppDbContext from "./app-dbcontext.js";
 import Conversation from "../models/conversation.js";
 import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
 
-type cObject = {
-  
-
-}
-
 class Bard {
 	private axios: AxiosInstance;
 	private db: AppDbContext;
