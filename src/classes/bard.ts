@@ -224,7 +224,8 @@ class Bard {
 			  conversationId: conversation.c,
 		          requestId: conversation.r,
 		          responseId: conversation.rc,
-		          responses: parsedResponse.responses
+		          responses: parsedResponse.responses,
+		          lastActive: Date.now(),
 			}
 
 			return finalResponse;
