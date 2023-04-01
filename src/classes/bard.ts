@@ -165,7 +165,7 @@ class Bard {
 
 	public async ask(prompt: string, conversationObject?: { conversationId: string, requestId: string, responseId: string }, conversationId?: string) {
 		// return await this.askStream((data) => {}, prompt, conversationId);
-		let resData = await this.send(prompt, conversationId, conversationObject,);
+		let resData = await this.send(prompt, conversationId, conversationObject);
 		return resData;
 	}
 
@@ -188,7 +188,7 @@ class Bard {
 		  conversation.r = conversationObject.requestId
 		  conversation.rc = conversationObject.responseId
 		} else {
-		let conversation = this.getConversationById(conversationId);
+		conversation = this.getConversationById(conversationId);
 		}
 		try {
 			let { at, bl } = await this.GetRequestParams();

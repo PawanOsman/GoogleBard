@@ -5,6 +5,7 @@ npm-debug.log
 yarn.lock
 node_modules/
 dist/
+OG/
 .parcel-cache
 db.json
 .env

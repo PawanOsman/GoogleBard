@@ -9,19 +9,18 @@ const rl = readline.createInterface({
   output: process.stdout
 });
 
-let cookies = `NID=; SID=; __Secure-1PSID=; __Secure-3PSID=; HSID=; SSID=; APISID=; SAPISID=; __Secure-1PAPISID=; __Secure-3PAPISID=; SIDCC=; __Secure-1PSIDCC=; __Secure-3PSIDCC=`;
+let cookies = `__Secure-1PSID=Uwipm0y7yXwfePHWX4g8U8mYN5CX-qiu1G0EIiziHbMgwqo2ka0ulXKEwQpayygxrNcybw.`;
 
-let bot = new Bard(cookies, {
-  proxy: {  // optional
-    host: process.env.PROXY_HOST,
-    port: process.env.PROXY_PORT,
-    auth: {
-      username: process.env.PROXY_USERNAME,
-      password: process.env.PROXY_PASSWORD
-    },
-    protocol: process.env.PROXY_PROTOCOL
-  }
-});
+let yourConversationObject = `{"conversationId":"c_93c9fbe53c884882","requestId":"r_93c9fbe53c884b3b","responseId":"rc_93c9fbe53c884279","responses":["It is a pleasure to meet you, Eris. I am Bard.","Eris","It is a pleasure to meet you, Eris. I am Bard.","It is a pleasure to meet you, Eris! I am Bard. What can I help you with today?","Hello Eris! It's a pleasure to meet you. I'm Bard."]}`
+
+let conversationObject = {}
+
+if (yourConversationObject) {
+  conversationObject = JSON.parse(yourConversationObject)
+  console.log(`Your conversation object was loaded! The new object is ${JSON.stringify(conversationObject)}`)
+}
+
+let bot = new Bard(cookies);
 
 async function main() {
   while (true) {
@@ -32,9 +31,10 @@ async function main() {
     });
 
     process.stdout.write("Google Bard: ");
-    await bot.askStream(res => {
-      process.stdout.write(res.toString());
-    }, prompt);
+    conversationObject = await bot.ask(prompt, conversationObject)
+      process.stdout.write(conversationObject.responses[0]);
+      console.log()
+    process.stdout.write(`Conversation object: ${JSON.stringify(conversationObject)}`)
     console.log();
   }
 }
