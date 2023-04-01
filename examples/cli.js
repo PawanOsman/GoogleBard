@@ -9,7 +9,7 @@ const rl = readline.createInterface({
   output: process.stdout
 });
 
-let cookies = `__Secure-1PSID=Uwipm0y7yXwfePHWX4g8U8mYN5CX-qiu1G0EIiziHbMgwqo2ka0ulXKEwQpayygxrNcybw.`;
+let cookies = `__Secure-1PSID=`;
 
 let yourConversationObject = `{"conversationId":"c_93c9fbe53c884882","requestId":"r_93c9fbe53c884b3b","responseId":"rc_93c9fbe53c884279","responses":["It is a pleasure to meet you, Eris. I am Bard.","Eris","It is a pleasure to meet you, Eris. I am Bard.","It is a pleasure to meet you, Eris! I am Bard. What can I help you with today?","Hello Eris! It's a pleasure to meet you. I'm Bard."]}`
 
