@@ -28,12 +28,14 @@ console.log(response);
 ```
 
 ## **Features**
+
 - **Simulating Response Streaming**: The package simulates response streaming, allowing you to get the response as soon as it is available.
 - **Multiple conversations**: The package supports multiple conversations, allowing you to have multiple parallel conversations with the chatbot.
 - **Proxy Support**: The package supports proxies, allowing you to use the chatbot from any location.
 - **Lightweight**: The package is very lightweight, making it easy to use and integrate into your projects.
 
 ## **You must be whitelisted by google to use this package.**
+
 You must be whitelisted by google to use this package. You can join waitlist by going to https://bard.google.com and clicking on "Join Waitlist" button.
 
 You can use USA proxies to get whitelisted.
@@ -53,8 +55,10 @@ import { Bard } from "googlebard";
 let cookies = `__Secure-1PSID=<YOUR_COOKIE>`;
 
 let bot = new Bard(cookies, {
+	inMemory: false, // optional: if true, it will not save conversations to disk
+	savePath: "./conversations.json", // optional: path to save conversations
 	proxy: {
-		// optional
+		// optional: proxy configuration
 		host: process.env.PROXY_HOST,
 		port: process.env.PROXY_PORT,
 		auth: {
@@ -65,15 +69,18 @@ let bot = new Bard(cookies, {
 	},
 });
 
-let conversationId = "conversation name"; // optional: to make it remember old conversations
+let conversationId = "conversation name"; // optional: to make it remember the conversation
 
-let response = await bot.ask("Hello?", conversationId);
+
+let response = await bot.ask("Hello?", conversationId); // conversationId is optional
 console.log(response);
 
 // Simulating response streaming
-
-await bot.askStream((res) => {
-	console.log(res);
-}, "Hello?", conversationId);
-
+await bot.askStream(
+	(res) => {
+		console.log(res);
+	},
+	"Hello?",
+	conversationId,
+);
 ```
