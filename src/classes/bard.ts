@@ -10,21 +10,32 @@ import Conversation from "../models/conversation.js";
 import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
 
 class Bard {
+	private options: Options;
 	private axios: AxiosInstance;
-	private db: AppDbContext;
+	public db: AppDbContext;
 	private cookies: string = "";
 
-	constructor(cookie: string, options?: Options) {
-		this.db = new AppDbContext();
+	constructor(cookies: string, options?: Options) {
+		this.options = {
+			inMemory: options?.inMemory ?? true,
+			savePath: options?.savePath ?? "./db.json",
+			proxy: options?.proxy ?? undefined,
+		};
 
-		this.cookies = cookie;
+		if (!this.options.proxy) delete this.options.proxy;
+
+		this.db = new AppDbContext(this.options.savePath, {
+			inMemory: this.options.inMemory,
+		});
+
+		this.cookies = cookies;
 
 		const agent = new https.Agent({
 			rejectUnauthorized: false,
 		});
 
 		let axiosOptions: AxiosRequestConfig = {
-			proxy: options?.proxy,
+			proxy: this.options.proxy,
 			httpsAgent: agent,
 			headers: {
 				"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/109.0",
@@ -52,7 +63,7 @@ class Bard {
 		await this.db.WaitForLoad();
 	}
 
-	private addConversation(id: string) {
+	public addConversation(id: string) {
 		let conversation: Conversation = {
 			id: id,
 			c: "", // conversationId
@@ -64,7 +75,7 @@ class Bard {
 		return conversation;
 	}
 
-	private getConversationById(id?: string) {
+	public getConversationById(id?: string) {
 		if (!id)
 			return {
 				id: "",
@@ -80,6 +91,10 @@ class Bard {
 			conversation.lastActive = Date.now();
 		}
 		return conversation;
+	}
+
+	public getAllConversations() {
+		return this.db.conversations.ToArray();
 	}
 
 	public resetConversation(id: string = "default") {
@@ -101,42 +116,47 @@ class Bard {
 			rc: "",
 			responses: [],
 		};
-		let parseData = (data: string) => {
-			if (typeof data === "string") {
-				if (data?.startsWith("c_")) {
-					resData.c = data;
-					return;
-				}
-				if (data?.startsWith("r_")) {
-					resData.r = data;
-					return;
-				}
-				if (data?.startsWith("rc_")) {
-					resData.rc = data;
-					return;
-				}
-				resData.responses.push(data);
-			}
-			if (Array.isArray(data)) {
-				data.forEach((item) => {
-					parseData(item);
-				});
-			}
-		};
+
 		try {
-			const lines = text.split("\n");
-			for (let i in lines) {
-				const line = lines[i];
-				if (line.includes("wrb.fr")) {
-					let data = JSON.parse(line);
-					let responsesData = JSON.parse(data[0][2]);
-					responsesData.forEach((response) => {
-						parseData(response);
+			let parseData = (data: string) => {
+				if (typeof data === "string") {
+					if (data?.startsWith("c_")) {
+						resData.c = data;
+						return;
+					}
+					if (data?.startsWith("r_")) {
+						resData.r = data;
+						return;
+					}
+					if (data?.startsWith("rc_")) {
+						resData.rc = data;
+						return;
+					}
+					resData.responses.push(data);
+				}
+				if (Array.isArray(data)) {
+					data.forEach((item) => {
+						parseData(item);
 					});
 				}
+			};
+			try {
+				const lines = text.split("\n");
+				for (let i in lines) {
+					const line = lines[i];
+					if (line.includes("wrb.fr")) {
+						let data = JSON.parse(line);
+						let responsesData = JSON.parse(data[0][2]);
+						responsesData.forEach((response) => {
+							parseData(response);
+						});
+					}
+				}
+			} catch (e: any) {
+				throw new Error(`Error parsing response: make sure you are using the correct cookie, copy the value of "__Secure-1PSID" cookie and set it like this: \n\nnew Bard("__Secure-1PSID=<COOKIE_VALUE>")\n\nAlso using a US proxy is recommended.\n\nIf this error persists, please open an issue on github.\nhttps://github.com/PawanOsman/GoogleBard`);
 			}
-		} catch (e: any) {
-			console.log(e.message);
+		} catch (err) {
+			throw new Error(`Error parsing response: make sure you are using the correct cookie, copy the value of "__Secure-1PSID" cookie and set it like this: \n\nnew Bard("__Secure-1PSID=<COOKIE_VALUE>")\n\nAlso using a US proxy is recommended.\n\nIf this error persists, please open an issue on github.\nhttps://github.com/PawanOsman/GoogleBard`);
 		}
 
 		return resData;
@@ -159,7 +179,7 @@ class Bard {
 			const bl = context.googleData.cfb2h;
 			return { at, bl };
 		} catch (e: any) {
-			console.log(e.message);
+			throw new Error(`Error parsing response: make sure you are using the correct cookie, copy the value of "__Secure-1PSID" cookie and set it like this: \n\nnew Bard("__Secure-1PSID=<COOKIE_VALUE>")\n\nAlso using a US proxy is recommended.\n\nIf this error persists, please open an issue on github.\nhttps://github.com/PawanOsman/GoogleBard`);
 		}
 	}
 
@@ -171,6 +191,8 @@ class Bard {
 
 	public async askStream(data: (arg0: string) => void, prompt: string, conversationId?: string) {
 		let resData = await this.send(prompt, conversationId);
+		if (!resData) return "";
+		if (!resData[0]) return "";
 		let responseChunks = resData[0].split(" ");
 		for await (let chunk of responseChunks) {
 			if (chunk === "") continue;

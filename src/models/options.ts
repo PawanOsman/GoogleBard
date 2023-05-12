@@ -1,4 +1,6 @@
 interface Options {
+	inMemory?: boolean;
+	savePath?: string;
 	proxy?: {
 		host: string;
 		port: number;
