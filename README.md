@@ -8,7 +8,7 @@
 [![GitHub license](https://img.shields.io/github/license/PawanOsman/GoogleBard?label=License&logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAAsQAAALEBxi1JjQAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAQrSURBVEiJpZVvbFNVGMZ/t/e2ZW2XDUZvhwLt1rUyYOA2FJNFiRsYjREGBlCmJgiOPzKDET4gBqaSoEGREOOiY5kRI2QxETUyAigxCskQmQaSwcKEjsJYN7uO/W3Xe48fll3ZGCvom5zkzXnu+/zuveec90gMD8scn78uApPtDrvGGCFJkmQdl2QzyYoZIbSBaPTImd/qnh2rxpLv9V0q8k8T39UeFd0DIuHojAkR7B0cS54riQL3jTRVhszzMrPOr3/4EW8w0mGIf9TXU1VZiaaN/jGqy0XZm9uRZRnVlW4CUoDrIwGWfG9WQ9ncgsxC/wNU150yxE8rKigsXsX4NOeogK8qP6Cp8QL+7Bl3/C1Knt//g97Xn3k62MzpYDNnWq7xfPZ0AJxOJ8e+/ZLX33qfg59/Qke4fVhx08VzpKSOv6M5gNKnmD01P9YaE86JThzJyQC8vWMHV5ubmTI5iXWrS+jr7xtW7EjejDklbWyAySSLjIzMUUVJkpjqdgOQPmnSbbomoCs+mPunz9CBjpHPmMbE30NkT88RgDRyfmgX0REOU11VmdCoaMETzH4wF4DAlctU7/uYQNNFVDlgnffQ/Zd6+uPHtLh+ob6hbSugGQBHcjKPF81PCHC7PUa+ecOLbFnlxbPIizs9B60rbDvf2L7o0InAwp7egVBjILLbAJjNZnLz8hMChqJi7y5m+2zMmuZi0ztHuNYSQdN0li9ws+mlHOnwyeC21FTbCQMQam3ljY1lCY1Xl65Fdbn4/ZcaDux5iqVrDrKy0EW+z4MuBNv2nUVNs/H9nvkpT756tNYAqC4X+w/U3NXbd0YiIFno6okhBgbI9w2eBZMksXmZm61fNFCQOwmrRQ4ZgPa2NvZ+9GFC82eKF+PxZCDLErJJIq7pw3RNEyiyCUWR0AUWAzAhLY2Vr5QmBKiqixst1+nu7sVqUUidkMzxsyHm56nEBnTK9//F2pI5hDujaJpmNwAmk4nxCY49gNVqxZvlo3jFRsreraZi50LKd//EwT3n0HWddUtnkZs9kcLS2vb6hrZ50oyZsxrr6v/0hVpb2VG+LSFg+YoSCh59bDBfVEjpYhWX087cmSp94RAn61uo/fWa+OZEYO3lYOdnBiCh8yhxozXE8oVF5KT3cjMG4Ug/CiJ2+sLf793sjpUDQklkMlY4VRWPewpblgi6++KkOsxUHb4SPX6m5WdAwC2tItLRQXVVJUIIw8But7Nm/Ya7gplMEop8e2szADa7nbz8Oej6v9vO7nAkNJYVCztrLnEjmqY3njsVmOqyOYH4kP6/1kATcL6xievBqwgtHl329IIMoAA4NARRYrGoFo/HUZT/thzuTC/uTC+vvfyCxGC7/vpWXenq6d4+Nzdn17ikJOu9GEuSJFmsNrusyIoQQotFo7WMuPAB/gHPaKaziaM8GAAAAABJRU5ErkJggg==)](https://github.com/PawanOsman/GoogleBard)
 [![Discord server](https://img.shields.io/discord/1055397662976905229?color=5865F2&label=Discord&logo=discord&logoColor=white)](https://discord.pawan.krd)
 
-A simple Node.js module for creating ChatGPT using OpenAI official API.
+A simple Node.js module for creating GoogleBard chatbot using Bard's official API.
 
 ## **Installation**
 
@@ -55,32 +55,31 @@ import { Bard } from "googlebard";
 let cookies = `__Secure-1PSID=<YOUR_COOKIE>`;
 
 let bot = new Bard(cookies, {
-	inMemory: false, // optional: if true, it will not save conversations to disk
-	savePath: "./conversations.json", // optional: path to save conversations
-	proxy: {
-		// optional: proxy configuration
-		host: process.env.PROXY_HOST,
-		port: process.env.PROXY_PORT,
-		auth: {
-			username: process.env.PROXY_USERNAME,
-			password: process.env.PROXY_PASSWORD,
-		},
-		protocol: "http",
-	},
+  inMemory: false, // optional: if true, it will not save conversations to disk
+  savePath: "./conversations.json", // optional: path to save conversations
+  proxy: {
+    // optional: proxy configuration
+    host: process.env.PROXY_HOST,
+    port: process.env.PROXY_PORT,
+    auth: {
+      username: process.env.PROXY_USERNAME,
+      password: process.env.PROXY_PASSWORD,
+    },
+    protocol: "http",
+  },
 });
 
 let conversationId = "conversation name"; // optional: to make it remember the conversation
-
 
 let response = await bot.ask("Hello?", conversationId); // conversationId is optional
 console.log(response);
 
 // Simulating response streaming
 await bot.askStream(
-	(res) => {
-		console.log(res);
-	},
-	"Hello?",
-	conversationId,
+  (res) => {
+    console.log(res);
+  },
+  "Hello?",
+  conversationId
 );
 ```
