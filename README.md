@@ -34,20 +34,13 @@ console.log(response);
 - **Proxy Support**: The package supports proxies, allowing you to use the chatbot from any location.
 - **Lightweight**: The package is very lightweight, making it easy to use and integrate into your projects.
 
-## **You must be whitelisted by google to use this package.**
-
-You must be whitelisted by google to use this package. You can join waitlist by going to https://bard.google.com and clicking on "Join Waitlist" button.
-
-You can use USA proxies to get whitelisted.
 
 ## **How to get cookies?**
 
 1. install [Cookie-Editor](https://cookie-editor.cgagnier.ca/) extension.
 2. Go to https://bard.google.com and login.
-3. Click on the extension icon and copy a cookie starting with `__Secure-` for example `__Secure-1PSID`
+3. Click on the extension icon and copy a cookie starting with `__Secure-{account_number}PSID` (e.g. `__Secure-1PSID`). Ensure you are copying the correct cookie corresponding to the account number, which can be found in the URL as `bard.google.com/u/3`. If your account number is `/u/3`, search for the cookie beginning with `__Secure-3PSID`.
 4. Paste the cookie in your code.
-
-## Usage: **_Using a USA proxy is recomended!_**
 
 ```javascript
 import { Bard } from "googlebard";
