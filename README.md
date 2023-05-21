@@ -243,7 +243,7 @@ console.log(response);
 
 <br>
 
-### How To Get All Your Previous Conversations?
+### 6. How To Get All Your Previous Conversations?
 In order to retrieve all your conversations, you may either implement the functionality through a custom logic or simply use the built-in `bot.getAllConversations()`. .A usage of it is given below:
 ```js
 import { Bard } from "googlebard";
@@ -259,7 +259,7 @@ console.log(response) // returns an array of different conversations
 
 <br>
 
-### How To Get A Single Conversation By ID?
+### 7. How To Get A Single Conversation By ID?
 ```js
 import { Bard } from "googlebard";
 
