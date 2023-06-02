@@ -1,4 +1,4 @@
-<h1 align='center'>GoogleBard</h1>
+<h1 align='center'>GoogleBard <img width="50" src="https://www.gstatic.com/lamda/images/sparkle_resting_v2_darkmode_2bdb7df2724e450073ede.gif" /></h1> 
 <p align='center'>An NPM module for creating GoogleBard chatbot using Bard's reverse-engineered API. With reverse-engineered API functionalities, it empowers developers to harness the full potential of Bard.</p>
 
 <br>
