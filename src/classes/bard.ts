@@ -186,20 +186,20 @@ class Bard {
 	public async ask(prompt: string, conversationId?: string) {
 		// return await this.askStream((data) => {}, prompt, conversationId);
 		let resData = await this.send(prompt, conversationId);
-		return resData[0];
+		return resData[3];
 	}
 
 	public async askStream(data: (arg0: string) => void, prompt: string, conversationId?: string) {
 		let resData = await this.send(prompt, conversationId);
 		if (!resData) return "";
-		if (!resData[0]) return "";
-		let responseChunks = resData[0].split(" ");
+		if (!resData[3]) return "";
+		let responseChunks = resData[3].split(" ");
 		for await (let chunk of responseChunks) {
 			if (chunk === "") continue;
 			data(`${chunk} `);
 			await Wait(Random(25, 250)); // simulate typing
 		}
-		return resData[0];
+		return resData[3];
 	}
 
 	private async send(prompt: string, conversationId?: string) {
